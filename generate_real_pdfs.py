@@ -1,0 +1,628 @@
+#!/usr/bin/env python3
+"""
+Generate REAL pitch PDFs for the RCP / Eleanor Lian ecosystem.
+Fixes: old script saved PPTX files as .pdf (corrupt files).
+
+Uses reportlab for proper PDF generation.
+"""
+
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.units import mm
+from reportlab.lib.colors import HexColor
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, HRFlowable
+from reportlab.lib.styles import ParagraphStyle
+from reportlab.lib.enums import TA_LEFT, TA_CENTER
+from reportlab.platypus.doctemplate import BaseDocTemplate, PageTemplate, Frame
+from reportlab.pdfgen import canvas
+import os, sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+GOLD = HexColor('#D4A747')
+DARK = HexColor('#0A0A0F')
+CREAM = HexColor('#F0E8D8')
+LIGHT = HexColor('#E0DCD5')
+MUTED = HexColor('#A09888')
+
+PAGE_W, PAGE_H = A4
+MARGIN = 20 * mm
+CONTENT_W = PAGE_W - 2 * MARGIN
+
+ts = ParagraphStyle('T', textColor=CREAM, fontSize=22, leading=28,
+    fontName='Helvetica-Bold', alignment=TA_LEFT, spaceAfter=6)
+ss = ParagraphStyle('S', textColor=MUTED, fontSize=11, leading=14,
+    fontName='Helvetica', alignment=TA_LEFT, spaceAfter=12)
+bs = ParagraphStyle('B', textColor=LIGHT, fontSize=10, leading=14,
+    fontName='Helvetica', alignment=TA_LEFT, spaceAfter=4)
+cs = ParagraphStyle('C', textColor=GOLD, fontSize=10, leading=14,
+    fontName='Helvetica-Bold', alignment=TA_CENTER, spaceBefore=12, spaceAfter=6)
+hs = ParagraphStyle('H', textColor=GOLD, fontSize=10, leading=13,
+    fontName='Helvetica-Bold', alignment=TA_LEFT, spaceBefore=8, spaceAfter=2)
+
+def bar():
+    return HRFlowable(width=CONTENT_W, thickness=0.6, color=GOLD,
+                      spaceBefore=2, spaceAfter=2)
+def gap(h=4):
+    return Spacer(1, h)
+
+def render_pitch(output_path, title, subtitle, body_lines, has_cta=True):
+    doc = SimpleDocTemplate(output_path, pagesize=A4,
+        leftMargin=MARGIN, rightMargin=MARGIN,
+        topMargin=MARGIN, bottomMargin=MARGIN)
+
+    def bg(c, _):
+        c.saveState()
+        c.setFillColor(DARK)
+        c.rect(0, 0, PAGE_W, PAGE_H, fill=1, stroke=0)
+        c.restoreState()
+
+    story = [gap(8), bar(), gap(6), Paragraph(title, ts)]
+    if subtitle:
+        story.append(Paragraph(subtitle, ss))
+    story.append(bar())
+    story.append(gap(10))
+
+    for line in body_lines:
+        if not line:
+            story.append(gap(4))
+        elif line.startswith('---'):
+            story.append(bar())
+            story.append(gap(4))
+        elif line.startswith('Contact'):
+            continue
+        else:
+            story.append(Paragraph(line, bs))
+
+    story.append(gap(10))
+    story.append(bar())
+    if has_cta:
+        story.append(gap(8))
+        story.append(Paragraph(
+            'Interested? Contact: <b>info@robertocalvoproductions.com</b>', cs))
+
+    doc.build(story, onFirstPage=bg, onLaterPages=bg)
+    sz = os.path.getsize(output_path)
+    return sz
+
+def run():
+    outdir = "/root/.openclaw/workspace/sigillum-maximum-site/derivative-pitches"
+    os.makedirs(outdir, exist_ok=True)
+
+    # All pitch data
+    all = []
+
+    # RCP Master
+    all.append(('RCP_Eleanor_Lian_Master_Pitch.pdf',
+        'RCP Productions \u2014 Eleanor Lian IP Portfolio',
+        'Three original fantasy universes. Endless adaptation possibilities.',
+        [
+        'ROBERTO CALVO PRODUCTIONS LTD presents the complete portfolio of Eleanor Lian,',
+        'an author whose work spans epic high fantasy, dark fairy tales, and emotional color-magic stories.',
+        '',
+        'Each IP below is fully developed with:',
+        '\u2022 Complete manuscript / story bible',
+        '\u2022 Character design sheets and world concept art',
+        '\u2022 Defined transmedia roadmap across 6+ commercial derivatives',
+        '\u2022 Ready for licensing, co-production, or outright acquisition',
+        '',
+        '---',
+        '',
+        '<b>IP 1 \u2014 SIGILLUM MAXIMUM: The Seal of the Seven Secrets</b>',
+        'Genre: Epic High Fantasy &nbsp;|&nbsp; Format: Anime / Film / Game / Manga / More',
+        'Status: Complete manuscript (~100K words), 55+ concept images, landing page live',
+        '',
+        '<b>IP 2 \u2014 THE CLOWN AND THE ICE CASTLE</b>',
+        'Genre: Dark Fantasy / Mystery &nbsp;|&nbsp; Format: Film / Series / Graphic Novel',
+        'Status: Complete manuscript (85K words, 35 chapters), character art available',
+        '',
+        '<b>IP 3 \u2014 BEIN AND THE WORLD OF THE COLORS</b>',
+        'Genre: Emotional Fantasy / Coming-of-Age &nbsp;|&nbsp; Format: Animation / Book / Game',
+        'Status: Complete manuscript, 23+ concept images, full character roster',
+        '',
+        '---',
+        'Contact RCP for full literary rights, adaptation rights, and co-production inquiries.',
+        ]))
+
+    # Sigillum Master
+    all.append(('Sigillum_Maximum_Master_Pitch.pdf',
+        'SIGILLUM MAXIMUM',
+        'The Seal of the Seven Secrets \u2014 IP Overview by Eleanor Lian',
+        [
+        '<b>Logline:</b> A princess must unlock seven ancient secrets across seven magical realms to save her kingdom and discover the truth about who she really is.',
+        '',
+        '<b>Author:</b> Eleanor Lian &nbsp;|&nbsp; <b>Publisher:</b> RCP Productions Ltd',
+        '<b>Status:</b> Complete manuscript, 55+ concept images, landing page at sigillummaximum.com',
+        '',
+        '<b>STORY SUMMARY</b>',
+        'Princess Aileen of Nuvolandia witnesses her kingdom shattered by the mysterious Black Knight Dorcha. Her mother turned to stone, her father captured, she escapes through a hidden passage to seek the Seven Secrets of the Sigillum Maximum \u2014 ancient seals that hold the power to reshape reality itself.',
+        '',
+        'Alongside the Knight of Golden Light Aelti\u00e0fisar, the shape-shifting Grogher, the cursed princess Majory, and the winged leonine Sidae, Aileen journeys through seven kingdoms: Nuvolandia, Elf, Gnome, Merfolk, Dwarf, Storm, and the legendary Realm of the Great Light.',
+        '',
+        '<i>Theme: Every secret has a cost. Every choice has a consequence.</i>',
+        '',
+        '<b>TRANSMEDIA READINESS</b>',
+        'This IP is designed for simultaneous development across:',
+        '\u2022 Anime Series (12-24 episodes)',
+        '\u2022 Film Trilogy (epic fantasy feature films)',
+        '\u2022 Video Game (RPG / Action-Adventure)',
+        '\u2022 Board Game (strategy / cooperative)',
+        '\u2022 Manga / Comic (graphic novel adaptation)',
+        '\u2022 Merchandising (toys, apparel, collectibles)',
+        '\u2022 Immersive Experiences (theme park, VR, live events)',
+        '',
+        '<b>RIGHTS AVAILABLE:</b> Worldwide adaptation and licensing rights for all derivatives.',
+        ]))
+
+    # Sigillum Anime
+    all.append(('Sigillum_Maximum_Anime_Series.pdf',
+        'SIGILLUM MAXIMUM \u2014 Anime Series',
+        'Epic fantasy anime for global audiences',
+        [
+        '<b>Format:</b> TV Anime Series, 12-24 episodes \u00d7 24 minutes',
+        '<b>Genre:</b> Epic Fantasy / Coming-of-Age / Adventure',
+        '<b>Target:</b> Teens and young adults (13+), global anime market',
+        '',
+        '<b>PITCH</b>',
+        'A princess escapes through a hidden tunnel as her castle falls. She emerges into a world with seven realms, seven secrets, and one ancient seal that could save or doom everything. Sigillum Maximum is designed from the ground up as an anime property with the visual ambition of the best Studio Ghibli and the narrative scope of Attack on Titan or Fullmetal Alchemist.',
+        '',
+        '<b>STRUCTURE</b>',
+        '\u2022 Arc 1 (Ep 1-6): Nuvolandia \u2014 establishing the world, the fall of the kingdom',
+        '\u2022 Arc 2 (Ep 7-12): The Elf Realm and Gnome Kingdom \u2014 first two secrets',
+        '\u2022 Arc 3 (Ep 13-18): Merfolk and Dwarf Realms \u2014 deepening the mystery',
+        '\u2022 Arc 4 (Ep 19-24): Storm Realm, the Great Light, and the Final Secret',
+        '',
+        '<b>VISUAL IDENTITY:</b> Seven realms = seven distinct art styles and color palettes. From the cloud-cities of Nuvolandia to the crystalline depths of the Merfolk realm.',
+        '',
+        '<b>Comparable:</b> The Ancient Magus\u2019 Bride meets Made in Abyss meets Frieren.',
+        '<b>Available:</b> Worldwide anime / broadcast rights.',
+        ]))
+
+    # Sigillum Film Trilogy
+    all.append(('Sigillum_Maximum_Film_Trilogy.pdf',
+        'SIGILLUM MAXIMUM \u2014 Film Trilogy',
+        'Epic fantasy cinema for the big screen',
+        [
+        '<b>Format:</b> Feature Film Trilogy (3 \u00d7 120-150 min)',
+        '<b>Genre:</b> Epic High Fantasy / Adventure',
+        '<b>Target:</b> Lord of the Rings / Harry Potter generation',
+        '',
+        '<b>PITCH</b>',
+        'A sweeping fantasy trilogy in the tradition of Lord of the Rings and Harry Potter. Each film covers approximately two realms and two secrets.',
+        '',
+        '<b>FILM STRUCTURE</b>',
+        '<b>Film 1:</b> "The Fall of Nuvolandia" \u2014 Secrets 1 &amp; 2 (Elf Realm / Gnome Kingdom)',
+        'Aileen loses everything and begins her journey. Introduction to the sentient sword Aelti\u00e0fisar.',
+        '',
+        '<b>Film 2:</b> "The Depths and the Mountains" \u2014 Secrets 3 &amp; 4 (Merfolk / Dwarf)',
+        'The middle chapter deepens the lore. The cost of each secret becomes personal.',
+        '',
+        '<b>Film 3:</b> "The Seal of the Seven Secrets" \u2014 Secrets 5, 6, 7',
+        'The storm realm, the great light, and the revelation that the seventh secret is not a power to wield \u2014 it is a choice to make.',
+        '',
+        '<b>Comparable:</b> Lord of the Rings, Harry Potter, The Chronicles of Narnia.',
+        '<b>Available:</b> Worldwide film adaptation rights.',
+        ]))
+
+    # Sigillum Video Game
+    all.append(('Sigillum_Maximum_Video_Game.pdf',
+        'SIGILLUM MAXIMUM \u2014 Video Game',
+        'Open-world RPG set across seven magical realms',
+        [
+        '<b>Format:</b> Open-World Action RPG',
+        '<b>Platform:</b> PC / PlayStation / Xbox / Nintendo Switch',
+        '<b>Target:</b> Fans of The Legend of Zelda: Breath of the Wild, Elden Ring, Genshin Impact',
+        '',
+        '<b>PITCH</b>',
+        'A single-player action RPG where the map IS the story. Each realm is a distinct biome with unique gameplay mechanics.',
+        '',
+        '<b>CORE MECHANICS</b>',
+        '\u2022 Realm-based abilities \u2014 each secret unlocks a new power',
+        '\u2022 Companion system \u2014 unlock Grogher, Sidae, Majory as AI companions',
+        '\u2022 Moral choices \u2014 secrets can be obtained through wisdom, sacrifice, or force',
+        '\u2022 Aelti\u00e0fisar \u2014 sentient sword with evolving abilities and dialogue',
+        '\u2022 Flying mounts \u2014 Raertha (pegasus), Sidae (winged lion), Hercules (griffin)',
+        '',
+        '<b>WORLD DESIGN</b>',
+        'Seven realms, each ~10 sq km of explorable terrain.',
+        'Nuvolandia (sky islands), Elf Forest (luminescent woods), Gnome Caves (underground clockwork city), Merfolk Depths (underwater), Dwarf Mountains (volcanic forges), Storm Plains (weather-altered), Realm of the Great Light (the final, surreal zone).',
+        '',
+        '<b>Comparable:</b> The Legend of Zelda, Genshin Impact, Horizon Zero Dawn.',
+        '<b>Available:</b> Interactive / video game rights worldwide.',
+        ]))
+
+    # Sigillum Board Game
+    all.append(('Sigillum_Maximum_Board_Game.pdf',
+        'SIGILLUM MAXIMUM \u2014 Board Game',
+        'Cooperative strategy board game',
+        [
+        '<b>Format:</b> Cooperative Strategy Board Game',
+        '<b>Players:</b> 2-5 &nbsp;|&nbsp; <b>Age:</b> 12+ &nbsp;|&nbsp; <b>Duration:</b> 60-90 min',
+        '',
+        '<b>PITCH</b>',
+        'A cooperative board game where players take on the roles of Aileen, Grogher, Sidae, Majory, and a fifth original character. Together they journey through the seven realms, collecting secrets while the Black Knight Dorcha advances.',
+        '',
+        '<b>CORE MECHANICS</b>',
+        '\u2022 Realm tiles \u2014 7 realm decks shuffled and revealed as players explore',
+        '\u2022 Threat track \u2014 Dorcha advances each round, triggering events',
+        '\u2022 Secret cards \u2014 7 unique puzzles, each requiring different player skills',
+        '\u2022 Companion abilities \u2014 each character has unique powers and weaknesses',
+        '\u2022 Legacy elements \u2014 choices in one game affect future playthroughs',
+        '',
+        '<b>COMPONENTS:</b> Custom board (modular hex tiles), 5 player miniatures, 7 realm decks (42 cards), threat tokens, memory tokens, secret gem pieces.',
+        '',
+        '<b>Comparable:</b> Betrayal at House on the Hill, Gloomhaven: Jaws of the Lion.',
+        '<b>Available:</b> Tabletop game rights worldwide.',
+        ]))
+
+    # Sigillum Manga
+    all.append(('Sigillum_Maximum_Manga.pdf',
+        'SIGILLUM MAXIMUM \u2014 Manga / Comic',
+        'Graphic novel adaptation for the manga market',
+        [
+        '<b>Format:</b> Manga / Graphic Novel Series',
+        '<b>Volumes:</b> Planned 7-10 volumes (1 per realm + bonus)',
+        '<b>Target:</b> Teens and young adults, manga collectors',
+        '',
+        '<b>PITCH</b>',
+        'The Sigillum Maximum story adapts naturally to manga format. Each volume covers one realm and one secret.',
+        '',
+        '<b>VOLUME PLAN</b>',
+        'Vol 1: Nuvolandia \u2014 the fall, the escape, meeting Aelti\u00e0fisar',
+        'Vol 2: Elf Realm \u2014 the first secret, Grogher joins',
+        'Vol 3: Gnome Kingdom \u2014 clockwork puzzles, Sidae appears',
+        'Vol 4: Merfolk Depths \u2014 underwater realm, Majory\u2019s introduction',
+        'Vol 5: Dwarf Mountains \u2014 the forge fathers, the cost of creation',
+        'Vol 6: Storm Plains \u2014 Raertha, the Sky Kingdom',
+        'Vol 7: Realm of the Great Light \u2014 the final secret, the choice',
+        'Vol 8+: Side stories (Dorcha\u2019s origin, Aileen\u2019s childhood, kingdom lore)',
+        '',
+        '<b>ART STYLE:</b> Shojo/seinen hybrid \u2014 detailed backgrounds, expressive character art. Full color for first and last volumes; monochrome with color splash pages for middle volumes.',
+        '',
+        '<b>Comparable:</b> The Ancient Magus\u2019 Bride, Frieren, Nausica\u00e4 of the Valley of the Wind.',
+        '<b>Available:</b> Manga / comic publishing rights worldwide.',
+        ]))
+
+    # Sigillum Merch
+    all.append(('Sigillum_Maximum_Merchandising.pdf',
+        'SIGILLUM MAXIMUM \u2014 Merchandising',
+        'Premium fantasy merchandise line',
+        [
+        '<b>Category:</b> Collectibles, Apparel, Home Decor, Stationery',
+        '<b>Target:</b> Fantasy fans, anime collectors, general audience',
+        '',
+        '<b>PRODUCT LINES</b>',
+        '',
+        '<b>1. Collectibles:</b>',
+        '\u2022 Premium figures \u2014 Aileen (3 versions), Dorcha, Grogher, Sidae',
+        '\u2022 Realm dioramas \u2014 miniature 3D scenes of each realm',
+        '\u2022 Replica prop \u2014 Aelti\u00e0fisar letter opener / display piece',
+        '\u2022 Seven Secrets gem set \u2014 display-grade acrylic gems',
+        '',
+        '<b>2. Apparel:</b>',
+        '\u2022 T-shirts with realm crest designs (7 designs)',
+        '\u2022 Hoodies \u2014 "Sigillum Maximum" gold embossed',
+        '\u2022 Enamel pins \u2014 character silhouettes, realm symbols',
+        '',
+        '<b>3. Home / Stationery:</b>',
+        '\u2022 Art book \u2014 concept art collection, 200+ pages',
+        '\u2022 Journal set \u2014 one per realm, with embossed covers',
+        '\u2022 Map print \u2014 poster-sized illustrated map of the seven realms',
+        '\u2022 Tarot / oracle deck \u2014 based on characters and themes',
+        '',
+        '<b>Comparable:</b> Elden Ring collector\u2019s items, Ghibli merchandise.',
+        '<b>Available:</b> Global merchandising and licensing rights.',
+        ]))
+
+    # Sigillum Experiences
+    all.append(('Sigillum_Maximum_Experiences.pdf',
+        'SIGILLUM MAXIMUM \u2014 Immersive Experiences',
+        'Theme park, VR, and live experiences',
+        [
+        '<b>Category:</b> Theme Park Attraction, VR Experience, Live Event',
+        '<b>Type:</b> Location-based entertainment (LBE)',
+        '',
+        '<b>PITCH</b>',
+        'The seven realms of Sigillum Maximum offer incredible potential for immersive experiences that bring the fantasy world to physical spaces.',
+        '',
+        '<b>1. Theme Park Attraction</b>',
+        '\u2022 Dark ride: "Journey to the Seven Secrets" \u2014 trackless ride through the realms',
+        '\u2022 Walkthrough: "The Hall of Secrets" \u2014 interactive exhibit with projection mapping',
+        '\u2022 Restaurant: "The Gnome Kitchen" \u2014 fantasy-themed dining experience',
+        '',
+        '<b>2. VR Experience</b>',
+        '\u2022 "Sigillum Maximum: First Secret" \u2014 room-scale VR adventure (30 min)',
+        '\u2022 Multiplayer: "Defend Nuvolandia" \u2014 cooperative VR tower defense',
+        '\u2022 Escape room: "The Gnome Clockwork Puzzle" \u2014 VR puzzle experience',
+        '',
+        '<b>3. Live Events</b>',
+        '\u2022 Immersive theatre: "The Fall of Nuvolandia" \u2014 live-action with actors',
+        '\u2022 Exhibition: "The Art of Sigillum Maximum" \u2014 touring gallery of concept art',
+        '\u2022 Festival: "Realm Day" \u2014 seasonal events tied to each realm',
+        '',
+        '<b>Comparable:</b> Super Nintendo World, Wizarding World of Harry Potter, Meow Wolf.',
+        '<b>Available:</b> Location-based entertainment rights worldwide.',
+        ]))
+
+    # Clown Master
+    all.append(('Clown_Ice_Castle_Master_Pitch.pdf',
+        'THE CLOWN AND THE ICE CASTLE',
+        'A Dark Fantasy Tale by Eleanor Lian \u2014 IP Overview',
+        [
+        '<b>Genre:</b> Dark Fantasy / Mystery / Psychological Drama',
+        '<b>Format:</b> Novel (complete, ~85K words, 35 chapters)',
+        '<b>Status:</b> Complete manuscript, character art, concept images',
+        '',
+        '<b>LOGLINE</b>',
+        'A young woman and a mysterious clown venture into an enchanted ice castle that holds the secrets of a forgotten kingdom \u2014 and the truth about herself.',
+        '',
+        '<b>STORY</b>',
+        'In a land haunted by eternal winter, Thal\u00eca discovers a hidden path to an ice castle that appears only under the full moon. With George, a quiet childhood friend, she enters a world where the boundary between reality and nightmare dissolves.',
+        '',
+        '<b>THEMES:</b> Memory, identity, the masks we wear, the cost of truth.',
+        '',
+        '<b>KEY CHARACTERS:</b>',
+        'Thal\u00eca (protagonist, seen at 8 and 18 years)',
+        'George (childhood friend, adult companion)',
+        'The Clown (enigmatic guide, trickster, heart of the mystery)',
+        'Ice Castle (sentient setting, silent antagonist)',
+        '',
+        '<b>TONE:</b> Labyrinth meets The NeverEnding Story meets Paprika.',
+        '',
+        '<b>RIGHTS AVAILABLE:</b> Film, Series, Graphic Novel, Game.',
+        ]))
+
+    # Clown Film
+    all.append(('Clown_Ice_Castle_Film.pdf',
+        'THE CLOWN AND THE ICE CASTLE \u2014 Film',
+        'A dark fantasy feature film',
+        [
+        '<b>Format:</b> Feature Film (100-120 min) \u2014 Live-Action or High-End Animation',
+        '<b>Target:</b> Young Adult / Adult fantasy audiences (PG-13)',
+        '',
+        '<b>PITCH</b>',
+        'A psychological dark fantasy in the tradition of Pan\u2019s Labyrinth and The Fall. The Ice Castle itself is a character \u2014 a labyrinthine palace that shifts its halls and remembers everything.',
+        '',
+        '<b>VISUAL STYLE:</b> Gothic fantasy architecture meets crystalline ice palaces.',
+        '',
+        '<b>STRUCTURE</b>',
+        '(1) Discovery &amp; Entry \u2014 Thal\u00eca finds the hidden path, enters the castle',
+        '(2) Descent into Memory \u2014 each room reveals a layer of forgotten truth',
+        '(3) The Truth &amp; The Choice \u2014 the clown\u2019s real purpose, the price of knowledge',
+        '',
+        '<b>Comparable:</b> Pan\u2019s Labyrinth, The Fall, The Shape of Water (emotionally).',
+        '<b>Available:</b> Film adaptation rights worldwide.',
+        ]))
+
+    # Clown Series
+    all.append(('Clown_Ice_Castle_Series.pdf',
+        'THE CLOWN AND THE ICE CASTLE \u2014 Limited Series',
+        'A dark fantasy series for streaming platforms',
+        [
+        '<b>Format:</b> Limited Series, 6-8 episodes \u00d7 45-50 min',
+        '<b>Target:</b> Adult fantasy / mystery audiences (TV-MA / 16+)',
+        '<b>Platform:</b> Netflix, HBO, Apple TV+, Amazon Prime',
+        '',
+        '<b>PITCH</b>',
+        'Each episode explores one room or level of the Ice Castle, uncovering a layer of memory and mystery. The series format allows deeper character work and more complex narrative layering than a feature film.',
+        '',
+        '<b>EPISODE STRUCTURE</b>',
+        'Ep 1-2: Discovery \u2014 Thal\u00eca finds the path, enters the castle',
+        'Ep 3-5: Descent \u2014 each floor reveals a different kingdom memory',
+        'Ep 6: The Clown\u2019s Confession \u2014 the trickster\u2019s true nature revealed',
+        'Ep 7-8: The Throne Room and the Final Choice',
+        '',
+        '<b>Comparable:</b> The OA meets The Haunting of Hill House meets Dark.',
+        '<b>Available:</b> Series adaptation rights worldwide.',
+        ]))
+
+    # Clown Graphic Novel
+    all.append(('Clown_Ice_Castle_Graphic_Novel.pdf',
+        'THE CLOWN AND THE ICE CASTLE \u2014 Graphic Novel',
+        'A dark fantasy graphic novel adaptation',
+        [
+        '<b>Format:</b> Graphic Novel, 3-4 volumes, ~200 pages each',
+        '<b>Target:</b> Manga / graphic novel readers (16+)',
+        '',
+        '<b>PITCH</b>',
+        'The Ice Castle\u2019s visual richness makes it a perfect fit for the graphic novel medium. Each volume explores different floors of the castle with distinct art styles.',
+        '',
+        '<b>VOLUMES</b>',
+        'Vol 1: The Frozen Threshold \u2014 entering the castle',
+        'Vol 2: The Hall of Mirrors \u2014 confronting memories',
+        'Vol 3: The Heart of Ice \u2014 the clown\u2019s domain',
+        'Vol 4: The Thaw \u2014 resolution and return',
+        '',
+        '<b>ART STYLE:</b> Gothic manga meets European bande dessin\u00e9e. Monochrome with strategic color for magical elements.',
+        '',
+        '<b>Comparable:</b> The Sandman, Monstress, Through the Woods.',
+        '<b>Available:</b> Comic / graphic novel publishing rights worldwide.',
+        ]))
+
+    # Clown Game
+    all.append(('Clown_Ice_Castle_Game.pdf',
+        'THE CLOWN AND THE ICE CASTLE \u2014 Video Game',
+        'Psychological horror puzzle-adventure',
+        [
+        '<b>Format:</b> Puzzle-Adventure / Psychological Horror',
+        '<b>Platform:</b> PC, Consoles, Mobile (tablet-friendly)',
+        '<b>Target:</b> Fans of Portal, The Witness, Little Nightmares',
+        '',
+        '<b>PITCH</b>',
+        'A first-person puzzle game set inside the Ice Castle. Each floor is a self-contained puzzle box with a story layer. The Clown appears at key moments \u2014 sometimes guide, sometimes threat.',
+        '',
+        '<b>CORE MECHANICS</b>',
+        '\u2022 Ice manipulation \u2014 freeze water to create platforms, melt barriers',
+        '\u2022 Memory puzzles \u2014 reconstruct fragmented memories to open doors',
+        '\u2022 Mirror navigation \u2014 one mirror shows the past, one shows the truth',
+        '\u2022 The Clown\u2019s game \u2014 the trickster challenges you to moral choices',
+        '',
+        '<b>Comparable:</b> Portal 2 (puzzles), Little Nightmares (atmosphere), What Remains of Edith Finch (narrative).',
+        '<b>Available:</b> Interactive / video game rights worldwide.',
+        ]))
+
+    # Bein Master
+    all.append(('Bein_World_of_Colors_Master_Pitch.pdf',
+        'BEIN AND THE WORLD OF THE COLORS',
+        'An Emotional Fantasy by Eleanor Lian \u2014 IP Overview',
+        [
+        '<b>Genre:</b> Emotional Fantasy / Coming-of-Age / Magical Realism',
+        '<b>Format:</b> Children\u2019s Novel / Illustrated Story',
+        '<b>Status:</b> Complete manuscript, 23+ concept images, full character roster',
+        '',
+        '<b>LOGLINE</b>',
+        'A boy discovers that every emotion has a color \u2014 and that colors can heal, hurt, and reshape the world around him.',
+        '',
+        '<b>STORY</b>',
+        'Bein is a quiet boy who sees the world differently \u2014 literally. Every emotion around him manifests as a visible color. Anger is crimson. Joy is gold. Sadness is deep blue. Fear is grey. When his family faces a crisis that drains all color from his world, Bein must journey through the Land of Faded Hues to find the Source of All Colors.',
+        '',
+        '<b>THEMES:</b> Emotional intelligence, family bonds, grief and healing, the beauty of feeling deeply.',
+        '',
+        '<b>KEY CHARACTERS:</b>',
+        'Bein (protagonist, young boy who sees emotions as colors)',
+        'Mamma Caryl (nurturing mother), Sammy (protective older brother)',
+        'Anton (curious friend), F\u00econ (guide, joy personified)',
+        'Fearfy (personification of fear), Maith (the color witch)',
+        'Wacky (chaos spirit, trickster)',
+        '',
+        '<b>TONE:</b> Inside Out meets The Little Prince meets The Boy and the Heron.',
+        '',
+        '<b>RIGHTS AVAILABLE:</b> Animation, Children\u2019s Book, Game, Merchandising.',
+        ]))
+
+    # Bein Animation
+    all.append(('Bein_World_of_Colors_Animation.pdf',
+        'BEIN AND THE WORLD OF COLORS \u2014 Animated Film',
+        'A feature animation for family audiences',
+        [
+        '<b>Format:</b> Animated Feature Film (80-90 min)',
+        '<b>Target:</b> Family / Children 6+',
+        '<b>Tone:</b> Pixar-level emotional depth meets Studio Ghibli visual beauty',
+        '',
+        '<b>PITCH</b>',
+        'Bein\u2019s world offers a stunning visual concept \u2014 emotions as colors, the Land of Faded Hues as a greyscale wasteland, the Source of All Colors as a kaleidoscopic climax. Perfect for 2D or 3D animation.',
+        '',
+        '<b>STRUCTURE</b>',
+        'Act 1: The Colorful World \u2014 Bein\u2019s gift, family bonds, the crisis hits',
+        'Act 2: The Fading \u2014 journey through the greyscale world, meeting Fearfy, Maith',
+        'Act 3: The Source \u2014 the truth about colors and feelings, the final choice',
+        '',
+        '<b>EMOTIONAL BEAT:</b> The film teaches children that ALL emotions are valid \u2014 sadness, fear, and anger have purpose alongside joy and love.',
+        '',
+        '<b>Comparable:</b> Inside Out, The Boy and the Heron, Song of the Sea.',
+        '<b>Available:</b> Animation rights worldwide.',
+        ]))
+
+    # Bein Series
+    all.append(('Bein_World_of_Colors_Series.pdf',
+        'BEIN AND THE WORLD OF COLORS \u2014 Animated Series',
+        'An episodic journey through emotions',
+        [
+        '<b>Format:</b> Animated Series, 12-24 episodes \u00d7 22 min',
+        '<b>Target:</b> Children 4-10 and their families',
+        '<b>Platform:</b> Netflix, Cartoon Network, Disney+, Nick Jr.',
+        '',
+        '<b>PITCH</b>',
+        'An episodic animated series where each episode explores a different color and the emotion it represents. Educational without being preachy.',
+        '',
+        '<b>EPISODE STRUCTURE</b>',
+        'Ep 1-3: Introduction to color magic, meeting F\u00econ',
+        'Ep 4-7: Exploration of primary emotions (red=anger, blue=sadness, yellow=joy)',
+        'Ep 8-12: Secondary emotions (green=jealousy, pink=love, grey=fear)',
+        'Ep 13-18: Maith\u2019s lessons \u2014 colors can mix and change',
+        'Ep 19-24: The Spectrum \u2014 all colors together, emotional balance',
+        '',
+        '<b>EDUCATIONAL VALUE:</b> Social-emotional learning (SEL) curriculum alignment. Each episode comes with discussion guides for parents and teachers.',
+        '',
+        '<b>Comparable:</b> Bluey, Hilda, Steven Universe (emotionally).',
+        '<b>Available:</b> Series adaptation rights worldwide.',
+        ]))
+
+    # Bein Book
+    all.append(('Bein_World_of_Colors_Book.pdf',
+        'BEIN AND THE WORLD OF THE COLORS \u2014 Children\u2019s Books',
+        'Illustrated book series',
+        [
+        '<b>Format:</b> Illustrated Children\u2019s Book Series',
+        '<b>Target:</b> Ages 4-8 (picture books), Ages 6-10 (chapter books)',
+        '',
+        '<b>PITCH</b>',
+        'A series of beautifully illustrated books that teach emotional intelligence through color. Each book explores a different emotion and color with Bein and his friends.',
+        '',
+        '<b>BOOK SERIES PLAN</b>',
+        '\u2022 "Bein and the Red Storm" (Anger)',
+        '\u2022 "Bein and the Blue River" (Sadness)',
+        '\u2022 "Bein and the Golden Sun" (Joy)',
+        '\u2022 "Bein and the Grey Fog" (Fear)',
+        '\u2022 "Bein and the Green Vine" (Jealousy)',
+        '\u2022 "Bein and the Pink Blossom" (Love)',
+        '\u2022 "Bein and the Rainbow" (All emotions together)',
+        '',
+        'Each book: 32-48 pages, full-color illustrations. Also available as board books (toddler), activity books, and coloring books.',
+        '',
+        '<b>Comparable:</b> The Color Monster, The Boy and the Colors, Ruby Finds a Worry.',
+        '<b>Available:</b> Publishing rights worldwide (multiple languages).',
+        ]))
+
+    # Bein Game
+    all.append(('Bein_World_of_Colors_Game.pdf',
+        'BEIN AND THE WORLD OF COLORS \u2014 Video Game',
+        'Educational color-puzzle adventure',
+        [
+        '<b>Format:</b> Educational Puzzle-Adventure',
+        '<b>Platform:</b> Mobile (iOS/Android), Nintendo Switch, PC',
+        '<b>Target:</b> Children 4-10, educational market',
+        '',
+        '<b>PITCH</b>',
+        'A gentle puzzle game where players help Bein restore color to the world by solving emotion-based puzzles.',
+        '',
+        '<b>GAME MECHANICS</b>',
+        '\u2022 Color mixing puzzles \u2014 combine emotions to create nuanced feelings',
+        '\u2022 Empathy challenges \u2014 recognize emotions in character faces/scenarios',
+        '\u2022 Memory matching \u2014 color-emotion pair recall',
+        '\u2022 Breathing exercises \u2014 interactive calming activities tied to colors',
+        '\u2022 Free play mode \u2014 paint the world with colors, no pressure',
+        '',
+        '<b>ACCESSIBILITY:</b> No text required (pre-reader friendly). Colorblind-friendly mode. Parent dashboard.',
+        '',
+        '<b>Comparable:</b> Toca Boca, Sago Mini, Endless Alphabet.',
+        '<b>Available:</b> Educational game rights worldwide.',
+        ]))
+
+    # Bein Merch
+    all.append(('Bein_World_of_Colors_Merch.pdf',
+        'BEIN AND THE WORLD OF COLORS — Merchandising',
+        'Educational & playful products',
+        [
+        '<b>Category:</b> Toys, Apparel, Stationery, Educational Materials',
+        '<b>Target:</b> Children 2-10, parents, educators',
+        '',
+        '<b>1. Color Emotion Toys:</b>',
+        '• Plush: Bein, Fearfy, Fìon, Maith (color-changing)',
+        '• Color mixing playset — emotion flashcards deck (52 cards)',
+        '',
+        '<b>2. Apparel:</b> Color-changing t-shirts, mood socks, pajama sets',
+        '',
+        '<b>3. Educational:</b> Classroom kit, coloring books, app subscription',
+        '',
+        '<b>4. Home:</b> "My Feelings" journal, mood lamp, bedtime bundles',
+        '',
+        '<b>Comparable:</b> Inside Out merchandising, The Color Monster products.',
+        '<b>Available:</b> Global merchandising and licensing rights.',
+        ]))
+
+    # === GENERATE ALL ===
+    total = len(all)
+    ok = 0
+    for fname, title, subtitle, body in all:
+        path = os.path.join(outdir, fname)
+        try:
+            sz = render_pitch(path, title, subtitle, body)
+            print(f"  ✅ {fname} ({sz//1024} KB)")
+            ok += 1
+        except Exception as e:
+            print(f"  ❌ {fname}: {e}")
+
+    print(f"\n✅ Generated {ok}/{total} real PDF pitches")
+
+if __name__ == '__main__':
+    run()

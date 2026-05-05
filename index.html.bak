@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sigillum Maximum — The Seal of the Seven Secrets</title>
+    <meta name="description" content="Sigillum Maximum is an epic fantasy series by Eleanor Lian. A princess. Seven seals. One choice that will save — or shatter — the Great Universal Realm.">
+    <meta property="og:title" content="Sigillum Maximum — The Seal of the Seven Secrets">
+    <meta property="og:description" content="An epic fantasy series by Eleanor Lian. A princess. Seven seals. One choice that will save — or shatter — the Great Universal Realm.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="/images/1. AILEEN NELLA SUA CASETTA SULL'ALBERO.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;900&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🗝️%3C/text%3E%3C/svg%3E">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Lora', serif;
+            background: #0a0a0f;
+            color: #e0dcd5;
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+        h1, h2, h3, h4, h5, h6 { font-family: 'Cinzel', serif; font-weight: 700; color: #f0e8d8; }
+        a { color: inherit; text-decoration: none; }
+        img { max-width: 100%; height: auto; display: block; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+        .section { padding: 100px 0; }
+        .section-title {
+            text-align: center;
+            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            margin-bottom: 16px;
+            letter-spacing: 0.05em;
+        }
+        .section-subtitle {
+            text-align: center;
+            font-family: 'Lora', serif;
+            font-style: italic;
+            color: #a09888;
+            margin-bottom: 60px;
+            font-size: 1.1rem;
+        }
+        .gold { color: #d4a747; }
+        .btn {
+            display: inline-block;
+            font-family: 'Cinzel', serif;
+            font-weight: 600;
+            font-size: 0.85rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            padding: 16px 40px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: #d4a747;
+            color: #0a0a0f;
+            border: 2px solid #d4a747;
+        }
+        .btn-primary:hover {
+            background: #e8c86a;
+            border-color: #e8c86a;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(212, 167, 71, 0.3);
+        }
+        .btn-outline {
+            background: transparent;
+            color: #d4a747;
+            border: 2px solid rgba(212, 167, 71, 0.4);
+        }
+        .btn-outline:hover { border-color: #d4a747; transform: translateY(-2px); }
+
+        /* === NAV === */
+        .navbar {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            padding: 16px 0; transition: all 0.3s ease;
+            background: transparent;
+        }
+        .navbar.scrolled {
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(12px);
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(212, 167, 71, 0.15);
+        }
+        .nav-container {
+            max-width: 1200px; margin: 0 auto; padding: 0 24px;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .nav-logo { font-family: 'Cinzel', serif; font-weight: 700; font-size: 1.1rem; color: #d4a747; letter-spacing: 0.08em; }
+        .nav-logo span { color: #f0e8d8; }
+        .nav-links { display: flex; gap: 32px; list-style: none; }
+        .nav-links a {
+            font-family: 'Cinzel', serif;
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #a09888;
+            transition: color 0.3s;
+            position: relative;
+        }
+        .nav-links a:hover { color: #d4a747; }
+        .nav-links a::after {
+            content: '';
+            position: absolute; bottom: -4px; left: 0;
+            width: 0; height: 1px; background: #d4a747;
+            transition: width 0.3s;
+        }
+        .nav-links a:hover::after { width: 100%; }
+        .nav-toggle { display: none; background: none; border: none; color: #f0e8d8; font-size: 1.5rem; cursor: pointer; }
+
+        /* === HERO === */
+        .hero {
+            position: relative; min-height: 100vh;
+            display: flex; align-items: center; justify-content: center; overflow: hidden;
+        }
+        .hero-bg {
+            position: absolute; inset: 0;
+            background: url('images/2. Dorcha, cavaliere nero.png') center center / cover no-repeat;
+            filter: brightness(0.35) saturate(0.8);
+            transform: scale(1.05);
+            transition: transform 8s ease;
+        }
+        .hero:hover .hero-bg { transform: scale(1.1); }
+        .hero-overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(180deg, rgba(10,10,15,0.3) 0%, rgba(10,10,15,0.6) 40%, rgba(10,10,15,0.9) 80%, #0a0a0f 100%);
+        }
+        .hero-content {
+            position: relative; z-index: 2;
+            text-align: center; padding: 0 24px; max-width: 900px;
+        }
+        .hero-tag {
+            font-family: 'Cinzel', serif;
+            font-size: 0.75rem; letter-spacing: 0.25em; text-transform: uppercase;
+            color: #d4a747; margin-bottom: 24px;
+            opacity: 0; animation: fadeUp 1s 0.3s forwards;
+        }
+        .hero-tag::before, .hero-tag::after { content: '— '; color: rgba(212,167,71,0.4); }
+        .hero-tag::after { content: ' —'; }
+        .hero-title {
+            font-family: 'Cinzel', serif; font-weight: 900;
+            font-size: clamp(2.5rem, 8vw, 5.5rem); line-height: 1.1;
+            color: #f0e8d8; margin-bottom: 12px;
+            opacity: 0; animation: fadeUp 1s 0.5s forwards;
+        }
+        .hero-title em {
+            font-style: normal;
+            background: linear-gradient(135deg, #d4a747, #e8c86a, #f0e8d8);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero-subtitle {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(0.9rem, 2vw, 1.3rem);
+            color: #c0b8a8; letter-spacing: 0.12em; margin-bottom: 32px;
+            opacity: 0; animation: fadeUp 1s 0.7s forwards;
+        }
+        .hero-logline {
+            font-family: 'Lora', serif; font-style: italic;
+            font-size: clamp(1rem, 2vw, 1.35rem);
+            color: #e0dcd5; line-height: 1.6;
+            max-width: 650px; margin: 0 auto 48px;
+            opacity: 0; animation: fadeUp 1s 0.9s forwards;
+        }
+        .hero-buttons { opacity: 0; animation: fadeUp 1s 1.1s forwards; }
+        .hero-scroll {
+            position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+            color: #a09888; font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase;
+            animation: bounce 2s infinite; cursor: pointer; z-index: 2;
+        }
+        .hero-scroll svg { display: block; margin: 8px auto 0; }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes bounce { 0%,100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(8px); } }
+
+        /* === LOGLINE BANNER === */
+        .logline-banner {
+            background: linear-gradient(135deg, rgba(212,167,71,0.08) 0%, rgba(10,10,15,1) 50%, rgba(212,167,71,0.08) 100%);
+            border-top: 1px solid rgba(212,167,71,0.1);
+            border-bottom: 1px solid rgba(212,167,71,0.1);
+            padding: 48px 24px; text-align: center;
+        }
+        .logline-banner p {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(1rem, 2.5vw, 1.6rem);
+            color: #e0dcd5; max-width: 800px; margin: 0 auto;
+            line-height: 1.8; letter-spacing: 0.03em;
+        }
+        .logline-banner .highlight { color: #d4a747; }
+
+        /* === STORY === */
+        .story-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+        .story-image { border-radius: 8px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+        .story-image img { width: 100%; height: 450px; object-fit: cover; transition: transform 0.6s; }
+        .story-image:hover img { transform: scale(1.05); }
+        .story-text h3 { font-size: 1.6rem; margin-bottom: 20px; color: #d4a747; }
+        .story-text p { margin-bottom: 16px; color: #c0b8a8; font-size: 1.05rem; }
+        .story-text .quote {
+            font-style: italic; color: #d4a747; font-size: 1.1rem;
+            border-left: 2px solid rgba(212,167,71,0.3);
+            padding-left: 20px; margin: 24px 0;
+        }
+
+        /* === CHARACTERS === */
+        .characters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 32px;
+        }
+        .character-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(212,167,71,0.1);
+            border-radius: 8px; overflow: hidden; transition: all 0.4s; cursor: pointer;
+        }
+        .character-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(212,167,71,0.3);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+        }
+        .character-card img { width: 100%; height: 260px; object-fit: cover; }
+        .character-info { padding: 16px 20px 20px; }
+        .character-info h4 { font-size: 1rem; margin-bottom: 4px; }
+        .character-info .role {
+            font-size: 0.8rem; color: #d4a747;
+            font-family: 'Cinzel', serif; letter-spacing: 0.08em; text-transform: uppercase;
+        }
+        .character-info .desc { font-size: 0.9rem; color: #a09888; margin-top: 8px; line-height: 1.5; }
+
+        /* === REALMS === */
+        .realms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+        }
+        .realm-card {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 8px; padding: 32px 24px; transition: all 0.4s;
+            position: relative; overflow: hidden;
+        }
+        .realm-card::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0; height: 3px;
+            background: linear-gradient(90deg, transparent, var(--r-color, #d4a747), transparent);
+            opacity: 0.5;
+        }
+        .realm-card:hover { border-color: rgba(212,167,71,0.2); transform: translateY(-4px); }
+        .realm-card h4 { font-size: 1.1rem; margin-bottom: 8px; color: var(--r-color, #d4a747); }
+        .realm-card p { font-size: 0.9rem; color: #a09888; line-height: 1.6; }
+        .realm-card .rune { font-size: 2rem; margin-bottom: 12px; display: block; opacity: 0.6; }
+
+        /* === AUTHOR === */
+        .author-section { text-align: center; }
+        .author-card {
+            max-width: 600px; margin: 0 auto;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(212,167,71,0.1);
+            border-radius: 12px; padding: 48px 40px;
+        }
+        .author-card .avatar {
+            width: 100px; height: 100px; border-radius: 50%;
+            background: linear-gradient(135deg, #d4a747, #a08030);
+            margin: 0 auto 20px;
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Cinzel', serif; font-size: 2.5rem; color: #0a0a0f; font-weight: 700;
+        }
+        .author-card h3 { font-size: 1.5rem; margin-bottom: 4px; }
+        .author-card .handle { font-size: 0.9rem; color: #d4a747; margin-bottom: 16px; }
+        .author-card p { color: #a09888; font-size: 1rem; line-height: 1.7; }
+        .author-card .quote {
+            font-style: italic; color: #d4a747; margin-top: 24px;
+            padding: 20px; border: 1px solid rgba(212,167,71,0.15);
+            border-radius: 8px; font-size: 1rem;
+        }
+
+        /* === RCP / CONTACT === */
+        .rcp-section {
+            text-align: center; padding: 60px 24px;
+            background: rgba(255,255,255,0.01);
+            border-top: 1px solid rgba(212,167,71,0.08);
+        }
+        .rcp-section .rcp-logo {
+            font-family: 'Cinzel', serif; font-weight: 900;
+            font-size: 1.4rem; letter-spacing: 0.15em; color: #f0e8d8; margin-bottom: 8px;
+        }
+        .rcp-section .rcp-logo span { color: #d4a747; }
+        .rcp-section p { color: #a09888; font-size: 0.9rem; max-width: 500px; margin: 0 auto 20px; }
+        .rcp-section .contact-link { color: #d4a747; border-bottom: 1px solid rgba(212,167,71,0.3); transition: border-color 0.3s; }
+        .rcp-section .contact-link:hover { border-color: #d4a747; }
+
+        /* === FOOTER === */
+        footer { text-align: center; padding: 32px 24px; color: #605850; font-size: 0.8rem; border-top: 1px solid rgba(255,255,255,0.04); }
+        footer a { color: #a09888; }
+        footer a:hover { color: #d4a747; }
+
+        /* === MODAL === */
+        .modal-overlay {
+            display: none; position: fixed; inset: 0; z-index: 2000;
+            background: rgba(0,0,0,0.85); backdrop-filter: blur(8px);
+            align-items: center; justify-content: center; padding: 24px;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal {
+            background: #14141e; border: 1px solid rgba(212,167,71,0.2);
+            border-radius: 12px; max-width: 700px; width: 100%;
+            max-height: 90vh; overflow-y: auto; padding: 40px; position: relative;
+            animation: modalIn 0.3s ease;
+        }
+        .modal-close { position: absolute; top: 16px; right: 20px; background: none; border: none; color: #a09888; font-size: 1.5rem; cursor: pointer; }
+        .modal-close:hover { color: #f0e8d8; }
+        .modal img { width: 100%; max-height: 400px; object-fit: cover; border-radius: 8px; margin-bottom: 20px; }
+        .modal h2 { font-size: 1.5rem; margin-bottom: 4px; }
+        .modal .role { color: #d4a747; font-family: 'Cinzel', serif; font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 16px; }
+        .modal p { color: #c0b8a8; line-height: 1.7; margin-bottom: 12px; }
+        @keyframes modalIn { from { transform: translateY(24px) scale(0.96); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
+
+        /* === RESPONSIVE === */
+        @media (max-width: 768px) {
+            .nav-links { display: none; position: absolute; top: 100%; left: 0; right: 0; background: rgba(10,10,15,0.98); flex-direction: column; padding: 24px; gap: 20px; border-bottom: 1px solid rgba(212,167,71,0.15); }
+            .nav-links.active { display: flex; }
+            .nav-toggle { display: block; }
+            .story-grid { grid-template-columns: 1fr; gap: 32px; }
+            .story-image img { height: 280px; }
+            .characters-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+            .character-card img { height: 200px; }
+            .realms-grid { grid-template-columns: 1fr; }
+            .modal { padding: 24px; }
+            .author-card { padding: 32px 24px; }
+        }
+        @media (max-width: 480px) {
+            .characters-grid { grid-template-columns: 1fr; }
+            .hero-title { font-size: 2rem; }
+            .btn { display: block; width: 100%; text-align: center; margin-bottom: 12px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ==================== NAVBAR ==================== -->
+<nav class="navbar" id="navbar">
+    <div class="nav-container">
+        <div class="nav-logo">Sigillum <span>Maximum</span></div>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#story">The Story</a></li>
+            <li><a href="#characters">Characters</a></li>
+            <li><a href="#realms">The Seven Realms</a></li>
+            <li><a href="#author">The Author</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+        <button class="nav-toggle" id="navToggle" aria-label="Menu">☰</button>
+    </div>
+</nav>
+
+<!-- ==================== HERO ==================== -->
+<section class="hero" id="home">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <div class="hero-tag">Roberto Calvo Productions Presents</div>
+        <h1 class="hero-title">Sigillum <em>Maximum</em></h1>
+        <p class="hero-subtitle">The Seal of the Seven Secrets</p>
+        <p class="hero-logline">
+            "A princess. Seven seals. One choice that will save — or shatter — the Great Universal Realm."
+        </p>
+        <div class="hero-buttons">
+            <a href="#story" class="btn btn-primary">Discover the Story</a>
+            <a href="#contact" class="btn btn-outline">Get in Touch</a>
+        </div>
+    </div>
+    <div class="hero-scroll" onclick="document.getElementById('story').scrollIntoView({behavior:'smooth'})">
+        Scroll <svg width="16" height="24" viewBox="0 0 16 24" fill="none" stroke="#a09888" stroke-width="1.5"><path d="M2 8l6 8 6-8"/></svg>
+    </div>
+</section>
+
+<!-- ==================== LOGLINE BANNER ==================== -->
+<section class="logline-banner">
+    <p>
+        <span class="highlight">Seven kingdoms.</span> Seven secrets.
+        A <span class="highlight">black knight</span> who will stop at nothing.
+        And a princess who <span class="highlight">must find the light</span>
+        before the darkness consumes everything.
+    </p>
+</section>
+
+<!-- ==================== THE STORY ==================== -->
+<section class="section" id="story">
+    <div class="container">
+        <h2 class="section-title">The <span class="gold">Story</span></h2>
+        <p class="section-subtitle">An epic journey across the Great Universal Realm</p>
+        <div class="story-grid">
+            <div class="story-image">
+                <img src="images/1. AILEEN NELLA SUA CASETTA SULL'ALBERO.png" alt="Aileen in her treehouse" loading="lazy">
+            </div>
+            <div class="story-text">
+                <h3>When the Darkness Came</h3>
+                <p>
+                    Princess Aileen is thirteen when a mysterious <strong>Black Knight</strong> invades her peaceful kingdom of Nuvolandia.
+                    Her mother is turned to stone. Her father is taken captive. The ancient <strong>Sigillum Maximum</strong> —
+                    the golden scroll upon which the security of all seven realms depends — has been stolen.
+                </p>
+                <p>
+                    Sent through a hidden passage to the <strong>Elf Kingdom</strong>, Aileen must find the legendary
+                    <strong>Aeltiàfisar</strong>, the Knight of the Golden Light. Together with the fierce orc <strong>Grogher</strong>
+                    and the mysterious <strong>Dorcha</strong> — a boy with darkness in his blood — she embarks on a
+                    perilous quest across the seven kingdoms of the Great Universal Realm.
+                </p>
+                <div class="quote">
+                    "Seven trials. Seven secrets. Seven keys to saving a world."
+                </div>
+                <p>
+                    From the cloud-cities of Nuvolandia to the underwater palaces of the Merpeople,
+                    from the gnome kingdoms to the halls of the Elves — each realm holds a secret that
+                    could break the curse. But time is running out. And the Black Knight is always watching.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== CHARACTERS ==================== -->
+<section class="section" id="characters" style="background: rgba(255,255,255,0.01);">
+    <div class="container">
+        <h2 class="section-title">The <span class="gold">Characters</span></h2>
+        <p class="section-subtitle">Meet the heroes, villains, and magical companions</p>
+        <div class="characters-grid" id="charactersGrid"></div>
+    </div>
+</section>
+
+<!-- ==================== THE SEVEN REALMS ==================== -->
+<section class="section" id="realms">
+    <div class="container">
+        <h2 class="section-title">The <span class="gold">Seven Realms</span></h2>
+        <p class="section-subtitle">A universe built from light, shadow, and ancient magic</p>
+        <div class="realms-grid">
+            <div class="realm-card" style="--r-color:#e8d8b0;"><span class="rune">☁️</span><h4>Nuvolandia</h4><p>The Cloud Kingdom. A land of soft clouds, moonstone castles, and beings in constant telepathic contact with the skies. Home of Princess Aileen.</p></div>
+            <div class="realm-card" style="--r-color:#7ec850;"><span class="rune">🌿</span><h4>Elf Kingdom</h4><p>An ancient realm of towering forests and luminous cities. Home to Aeltiàfisar, the Knight of the Golden Light, and King Baelkers.</p></div>
+            <div class="realm-card" style="--r-color:#c0a060;"><span class="rune">⛰️</span><h4>Gnome Kingdom</h4><p>The Kingdom of the Two Rainbows. A subterranean realm of brilliant crystals, Pallafiocco tournaments, and ancient curses that still echo through the halls.</p></div>
+            <div class="realm-card" style="--r-color:#4a80c0;"><span class="rune">🌊</span><h4>Merfolk Kingdom</h4><p>An underwater realm of coral palaces and mother-of-pearl gowns. The merpeople hold secrets of the deep that even the oldest elves do not know.</p></div>
+            <div class="realm-card" style="--r-color:#806030;"><span class="rune">🏔️</span><h4>Dwarf Kingdom</h4><p>Forged in the heart of mountains. Masters of craft, stone, and ancient metallurgy. Their secret is one of the seven that Aileen must recover.</p></div>
+            <div class="realm-card" style="--r-color:#404060;"><span class="rune">⚡</span><h4>Storm Kingdom</h4><p>A realm of perpetual tempests. Home to the orcs. A people of immense strength, deep loyalty, and a secret buried in thunder.</p></div>
+            <div class="realm-card" style="--r-color:#f0e8d8;"><span class="rune">✨</span><h4>Realm of the Great Light</h4><p>The legendary domain where the Immortal Sovereigns retire. The source of the Sigillum Maximum's power. Few have seen it. None speak of it.</p></div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== THE AUTHOR ==================== -->
+<section class="section" id="author">
+    <div class="container">
+        <h2 class="section-title">The <span class="gold">Author</span></h2>
+        <p class="section-subtitle">The voice behind the magic</p>
+        <div class="author-section">
+            <div class="author-card">
+                <div class="avatar">EL</div>
+                <h3>Eleanor Lian</h3>
+                <p class="handle">Author &amp; Creator</p>
+                <p>
+                    Eleanor Lian is a storyteller who builds worlds where emotions have weight,
+                    magic has rules, and every character carries a piece of the human heart.
+                    <em>Sigillum Maximum — The Seal of the Seven Secrets</em> is her most ambitious
+                    work: an epic fantasy that explores courage, loss, love, and the choices that
+                    define who we become.
+                </p>
+                <div class="quote">
+                    "There are stories that do not wait to be written — they happen.
+                    They arrive like a silent call, like a force that passes through you
+                    and asks only to be welcomed. Sigillum Maximum is one of them."
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== RCP / CONTACT ==================== -->
+<section class="rcp-section" id="contact">
+    <div class="rcp-logo">ROBERTO CALVO <span>PRODUCTIONS</span> LTD</div>
+    <p>Publishing · Production · Distribution<br>London, United Kingdom</p>
+    <p>
+        <a href="https://www.robertocalvoproductions.com" class="contact-link" target="_blank">robertocalvoproductions.com</a><br>
+        <a href="mailto:info@robertocalvoproductions.com" class="contact-link">info@robertocalvoproductions.com</a>
+    </p>
+    <p style="margin-top:32px;font-size:0.85rem;">
+        For licensing, co-production, publishing and distribution inquiries,<br>
+        please reach out via the contacts above.
+    </p>
+</section>
+
+<!-- ==================== FOOTER ==================== -->
+<footer>
+    <p>&copy; 2025–2026 <a href="https://www.robertocalvoproductions.com">ROBERTO CALVO PRODUCTIONS LTD</a>. All rights reserved.</p>
+    <p style="margin-top:4px;">Sigillum Maximum &mdash; The Seal of the Seven Secrets by Eleanor Lian</p>
+</footer>
+
+<!-- ==================== MODAL ==================== -->
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal" id="modalContent">
+        <button class="modal-close" onclick="closeModal()">✕</button>
+        <img id="modalImg" src="" alt="">
+        <h2 id="modalName"></h2>
+        <div class="role" id="modalRole"></div>
+        <p id="modalDesc"></p>
+    </div>
+</div>
+
+<script>
+const characters = [
+    { name: 'Aileen', role: 'Protagonist', image: 'images/Aileen ragazzina, 13 anni.png', desc: 'The Princess of Nuvolandia. At thirteen, she witnesses the destruction of her kingdom and is thrust into a perilous quest across the Seven Realms. Brave, compassionate, and determined, Aileen carries the weight of an entire world on her shoulders as she grows from a sheltered girl into a young leader.' },
+    { name: 'Dorcha', role: 'The Knight with Darkness in His Blood', image: 'images/2. Dorcha, cavaliere nero.png', desc: 'Mysterious and conflicted, Dorcha was raised by orcs but carries a darkness that may be the key — or the doom — of the Great Universal Realm. His bond with Aileen grows into something neither expected, something that may defy fate itself.' },
+    { name: 'Grogher', role: 'The Fierce Orc with a Golden Heart', image: 'images/Grogher 2.png', desc: 'An orc of immense strength and even greater loyalty. Separated from his family at birth, Grogher finds a new purpose in protecting Aileen. With his winged lion Sidae by his side, he proves that courage comes in all shapes.' },
+    { name: 'Aeltiàfisar', role: 'Knight of the Golden Light', image: '', icon: '🗡️', desc: 'The legendary elven knight who once rode dragons into battle. Ancient, wise, and carrying the sorrow of a lost love, Aeltiàfisar becomes Aileen\'s guide and mentor — the bridge between her childhood and her destiny. Awaiting his official artwork.' },
+    { name: 'Raertha', role: 'Aileen\'s Magical Companion', image: 'images/Raertha.jpg', desc: 'A winged white unicorn of incredible beauty and power. Gifted to Aileen by King Baelkers, Raertha is a healer whose magic can mend the deepest wounds — physical and emotional.' },
+    { name: 'Sidae', role: 'Grogher\'s Companion', image: 'images/Raertha Hercules e Sidae.jpg', desc: 'An immense winged white lion who can read the hearts of those around him. Sidae never abandons Grogher, offering loyalty, warmth, and an approving purr when he senses a pure soul.' },
+    { name: 'Hercules', role: 'Dorcha\'s Steed', image: 'images/Hercules.jpg', desc: 'Dorcha\'s loyal black horse, later gifted the power of flight. Hercules is steadfast, perceptive, and responds to the emotional currents of his companions.' },
+    { name: 'Princess Majory', role: 'Gnome Princess', image: 'images/Majory.png', desc: 'The Princess of the Gnome Kingdom. Competitive, caring, and impulsive, Majory discovers that an ancient curse upon her family demands the ultimate sacrifice — and that true courage means choosing love over survival.' },
+    { name: 'Asher', role: 'True Love', image: 'images/Asher.png', desc: 'A gentle gnome tailor with a pure heart. Asher falls deeply in love with Majory and is willing to give everything — even his own life — to save her from the ancient curse.' },
+    { name: 'King Eadwig', role: 'King of Nuvolandia', image: 'images/3. Lotta tra Eadwig e Dorcha.png', desc: 'Aileen\'s father, the proud King of Nuvolandia. Turned to stone by the Black Knight\'s dark magic, his fate drives Aileen\'s quest to recover the Sigillum Maximum.' },
+    { name: 'Queen Eloria', role: 'Queen of Nuvolandia', image: 'images/5. Aileen ed Eloria si incontrano.png', desc: 'Aileen\'s mother. Transformed into a statue by the Black Knight, she is a symbol of everything Aileen fights to restore.' },
+    { name: 'Helbert', role: 'Royal Advisor', image: 'images/Helbert.png', desc: 'The goblin royal advisor of Nuvolandia. Loyal, sharp-witted, and deeply devoted to the royal family, Helbert helps guide Aileen through her first steps into the unknown.' },
+    { name: 'King Baelkers', role: 'Elf King', image: 'images/Re Bàistec.png', desc: 'The wise and powerful king of the Elves. A former companion of Aeltiàfisar in the ancient wars, he gifts Aileen her winged unicorn Raertha and becomes a steadfast ally.' },
+    { name: 'Aer', role: 'Aeltiàfisar\'s Lost Love', image: 'images/10. Aileen corre verso il castello.png', desc: 'A human girl who became a cloud spirit, then the wife of Aeltiàfisar. Her tragic death in a night attack set in motion events that echo through the ages.' },
+];
+
+function renderCharacters() {
+    const grid = document.getElementById('charactersGrid');
+    grid.innerHTML = '';
+    characters.forEach((ch, i) => {
+        const card = document.createElement('div');
+        card.className = 'character-card';
+        card.innerHTML = `
+            ${ch.image ? `<img src="${ch.image}" alt="${ch.name}" loading="lazy" onerror="this.parentElement.style.display='none'">` : `<div style="height:260px;display:flex;align-items:center;justify-content:center;background:rgba(212,167,71,0.05);font-size:4rem;opacity:0.5;">${ch.icon || '✨'}</div>`}
+            <div class="character-info">
+                <h4>${ch.name}</h4>
+                <div class="role">${ch.role}</div>
+                <div class="desc">${ch.desc.substring(0, 80)}${ch.desc.length > 80 ? '...' : ''}</div>
+            </div>
+        `;
+        card.addEventListener('click', () => openModal(ch, i));
+        grid.appendChild(card);
+    });
+}
+
+function openModal(ch, i) {
+    const overlay = document.getElementById('modalOverlay');
+    overlay.classList.add('active');
+    const modalImg = document.getElementById('modalImg');
+    if (ch.image) {
+        modalImg.src = ch.image;
+        modalImg.style.display = 'block';
+    } else {
+        modalImg.style.display = 'none';
+    }
+    document.getElementById('modalName').textContent = ch.name;
+    document.getElementById('modalRole').textContent = ch.role;
+    document.getElementById('modalDesc').textContent = ch.desc;
+    document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+    document.getElementById('modalOverlay').classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+document.addEventListener('DOMContentLoaded', renderCharacters);
+
+// Navbar scroll effect
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 100);
+});
+
+// Mobile nav toggle
+document.getElementById('navToggle').addEventListener('click', () => {
+    document.getElementById('navLinks').classList.toggle('active');
+});
+
+// Close mobile nav on link click
+document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', () => {
+        document.getElementById('navLinks').classList.remove('active');
+    });
+});
+
+// Close modal on overlay click
+document.getElementById('modalOverlay').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) closeModal();
+});
+
+// Escape key closes modal
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeModal();
+});
+</script>
+</body>
+</html>
