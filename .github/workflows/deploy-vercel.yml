@@ -28,9 +28,8 @@ jobs:
           mkdir -p .vercel
           echo '{"projectId":"'$VERCEL_PROJECT_ID'","orgId":"'$VERCEL_ORG_ID'"}' > .vercel/project.json
 
-      - name: Deploy to Vercel
+      - name: Deploy to Vercel Production
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         run: |
-          vercel deploy --token=$VERCEL_TOKEN --yes --cwd . 2>&1 || true
-          echo "Deploy attempted"
+          vercel deploy --prod --token=$VERCEL_TOKEN --yes --cwd .
